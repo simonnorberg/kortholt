@@ -1,0 +1,59 @@
+version: 2.0
+
+workspace: &workspace
+  ~/kortholt
+
+config_android: &config_android
+  docker:
+    - image: simonnorberg/circleci-android:api-29-ndk
+  working_directory: *workspace
+  environment:
+    JAVA_TOOL_OPTIONS: "-Xmx1024m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
+    GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dkotlin.incremental=false"
+    TERM: dumb
+
+update_sdk: &update_sdk
+  run:
+    name: Update SDK
+    command: |
+      yes | sdkmanager --licenses || true
+      sdkmanager "platform-tools" "platforms;android-29"
+
+cache_key: &cache_key
+  key: key-{{ checksum "build.gradle" }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+jobs:
+  build:
+    <<: *config_android
+    steps:
+      - <<: *update_sdk
+      - checkout
+
+      - restore_cache:
+          <<: *cache_key
+
+      - run: git submodule update --init --recursive
+      - run: ./gradlew dependencies
+      - run: ./gradlew assembleRelease
+      - run: ./gradlew install
+
+      - save_cache:
+          <<: *cache_key
+          paths:
+            - ~/.gradle
+
+      - store_artifacts:
+          path: build/outputs/aar
+          destination: aar
+      - store_artifacts:
+          path: build/libs
+          destination: libs
+      - store_artifacts:
+          path: build/poms
+          destination: pom
+
+      - deploy:
+          command: |
+            if [ ${CIRCLE_BRANCH} == "master" ]; then
+              ./gradlew bintrayUpload
+            fi

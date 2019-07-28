@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kortholt</string>
+    <string name="left_label">Sine wave in left channel</string>
+    <string name="right_label">Sine wave in right channel</string>
+</resources>

@@ -1,0 +1,113 @@
+plugins {
+    id 'com.github.dcendents.android-maven' version '2.1'
+    id 'com.jfrog.bintray' version '1.8.4'
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion versions.compile_sdk
+
+    defaultConfig {
+        minSdkVersion versions.min_sdk
+        targetSdkVersion versions.target_sdk
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++14"
+                arguments '-DANDROID_STL=c++_static'
+                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            }
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java', 'src/main/cpp/libpd/java']
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    libraryVariants.all {
+        it.generateBuildConfigProvider.configure { task ->
+            task.enabled = false
+        }
+    }
+}
+
+dependencies {
+    api "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+    api "androidx.annotation:annotation:$versions.annotation"
+    api "androidx.core:core-ktx:$versions.core_ktx"
+}
+
+def siteUrl = 'https://github.com/simonnorberg/kortholt'
+def gitUrl = 'https://github.com/simonnorberg/kortholt.git'
+
+version = '1.0.0'
+group = 'net.simno.kortholt'
+archivesBaseName = 'kortholt'
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'kortholt'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'Apache-2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    getArchiveClassifier().set('sources')
+}
+
+task javadoc(type: Javadoc) {
+    excludes = ['**/*.kt']
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    getArchiveClassifier().set('javadoc')
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+    user = 'simonnorberg'
+    setKey(System.getenv("BINTRAY_KEY"))
+    setConfigurations('archives')
+    pkg {
+        repo = 'maven'
+        name = 'kortholt'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        publish = false
+    }
+}

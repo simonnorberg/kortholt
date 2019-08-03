@@ -37,9 +37,11 @@ object Kortholt {
     private fun setDefaultStreamValues(context: Context) {
         context.getSystemService<AudioManager>()?.let { am ->
             try {
-                val sampleRate = am.getProperty(PROPERTY_OUTPUT_SAMPLE_RATE).toInt()
-                val framesPerBurst = am.getProperty(PROPERTY_OUTPUT_FRAMES_PER_BUFFER).toInt()
-                nativeSetDefaultStreamValues(sampleRate, framesPerBurst)
+                val sampleRate = am.getProperty(PROPERTY_OUTPUT_SAMPLE_RATE)?.toInt()
+                val framesPerBurst = am.getProperty(PROPERTY_OUTPUT_FRAMES_PER_BUFFER)?.toInt()
+                if (sampleRate != null && framesPerBurst != null) {
+                    nativeSetDefaultStreamValues(sampleRate, framesPerBurst)
+                }
             } catch (ignored: NumberFormatException) {
             }
         }

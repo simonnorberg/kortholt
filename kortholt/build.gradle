@@ -51,7 +51,7 @@ dependencies {
 def siteUrl = 'https://github.com/simonnorberg/kortholt'
 def gitUrl = 'https://github.com/simonnorberg/kortholt.git'
 
-version = '1.0.0'
+version = '1.0.1'
 group = 'net.simno.kortholt'
 archivesBaseName = 'kortholt'
 

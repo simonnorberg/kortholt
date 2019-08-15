@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion versions.compile_sdk
-
+    buildToolsVersion versions.build_tools
     defaultConfig {
         applicationId "net.simno.kortholt"
         minSdkVersion versions.min_sdk

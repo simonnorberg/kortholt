@@ -12,10 +12,13 @@ class SampleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample)
 
-        startService(Intent(this, SampleService::class.java))
-        Kortholt.create(this)
-        Kortholt.open(this, R.raw.test, "test.pd")
+        PdBaseHelper.openPatch(this, R.raw.test, "test.pd")
 
+        findViewById<CheckBox>(R.id.play_box).setOnCheckedChangeListener { _, isChecked ->
+            Intent(this, SampleService::class.java).let { intent ->
+                if (isChecked) startService(intent) else stopService(intent)
+            }
+        }
         findViewById<CheckBox>(R.id.left_box).setOnCheckedChangeListener { _, isChecked ->
             PdBase.sendFloat("left", if (isChecked) 1F else 0F)
         }
@@ -25,8 +28,8 @@ class SampleActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-        Kortholt.destroy()
         stopService(Intent(this, SampleService::class.java))
+        PdBaseHelper.closePatch()
+        super.onDestroy()
     }
 }

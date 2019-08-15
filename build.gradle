@@ -4,18 +4,23 @@ buildscript {
             'compile_sdk': 29,
             'min_sdk'    : 17,
             'target_sdk' : 29,
+            'build_tools': '29.0.2',
             'annotation' : '1.1.0',
             'appcompat'  : '1.1.0-rc01',
-            'core_ktx'   : '1.1.0-rc02'
+            'core_ktx'   : '1.1.0-rc03'
     ]
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0-rc02'
+        classpath 'com.android.tools.build:gradle:3.5.0-rc03'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
     }
+}
+
+plugins {
+    id 'com.github.ben-manes.versions' version '0.22.0'
 }
 
 allprojects {
@@ -32,7 +37,7 @@ task clean(type: Delete) {
 subprojects {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
         kotlinOptions {
-            jvmTarget = "1.6"
+            jvmTarget = "1.8"
             allWarningsAsErrors = true
         }
     }

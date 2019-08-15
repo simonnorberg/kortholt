@@ -13,16 +13,22 @@ import androidx.core.content.getSystemService
 
 class SampleService : Service() {
 
-    override fun onBind(intent: Intent?): IBinder? = null
+    override fun onCreate() {
+        super.onCreate()
+        Kortholt.create(this)
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(NOTIFICATION_ID, createNotification())
         return START_STICKY
     }
 
+    override fun onBind(intent: Intent?): IBinder? = null
+
     override fun onDestroy() {
-        super.onDestroy()
+        Kortholt.destroy()
         stopForeground(true)
+        super.onDestroy()
     }
 
     private fun createNotification(): Notification {

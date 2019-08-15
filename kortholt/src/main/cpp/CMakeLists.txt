@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.4.1)
 
-### INCLUDE LIBPD LIBRARY ###
+### BEGIN INCLUDE LIBPD ###
 
 option(PD_UTILS  "Compile utilities" ON)
 option(PD_EXTRA  "Compile extras" ON)
@@ -188,29 +188,29 @@ target_link_libraries(libpd PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 find_library(MATH_LIB m)
 target_link_libraries(libpd PUBLIC ${MATH_LIB})
 
-set (PD_NATIVE_SOURCES
+set(PD_NATIVE_SOURCES
     libpd/jni/z_jni_plain.c
 )
 add_library(pdnative SHARED ${PD_NATIVE_SOURCES})
 target_include_directories(pdnative PRIVATE libpd/jni libpd/libpd_wrapper/util)
 target_link_libraries(pdnative libpd)
 
-### END LIBPD INCLUDE SECTION ###
+### END INCLUDE LIBPD ###
 
-### INCLUDE OBOE LIBRARY ###
+### BEGIN INCLUDE OBOE ###
 
 # Set the path to the Oboe library directory
-set (OBOE_DIR oboe)
+set(OBOE_DIR ./oboe)
 
 # Add the Oboe library as a subproject.
-add_subdirectory(${OBOE_DIR})
+add_subdirectory(${OBOE_DIR} ./oboe)
 
 # Include the Oboe headers
 include_directories(${OBOE_DIR}/include)
 
-### END OBOE INCLUDE SECTION ###
+### END INCLUDE OBOE ###
 
-### Kortholt ###
+### KORTHOLT ###
 add_library(
     kortholt
     SHARED

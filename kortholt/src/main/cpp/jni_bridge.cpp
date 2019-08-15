@@ -5,26 +5,25 @@
 extern "C" {
 
 JNIEXPORT jlong JNICALL
-Java_net_simno_kortholt_Kortholt_nativeCreateEngine(
-        JNIEnv *env,
+Java_net_simno_kortholt_Kortholt_nativeCreateKortholt(
+        JNIEnv /*unused*/,
         jclass /*unused*/) {
-    // We use std::nothrow so 'new' returns a nullptr if the engine creation fails
-    auto *engine = new(std::nothrow) Kortholt();
-    return reinterpret_cast<jlong>(engine);
+    auto *kortholt = new(std::nothrow) Kortholt();
+    return reinterpret_cast<jlong>(kortholt);
 }
 
 JNIEXPORT void JNICALL
-Java_net_simno_kortholt_Kortholt_nativeDeleteEngine(
-        JNIEnv *env,
-        jclass,
-        jlong engineHandle) {
-    delete reinterpret_cast<Kortholt *>(engineHandle);
+Java_net_simno_kortholt_Kortholt_nativeDeleteKortholt(
+        JNIEnv /*unused*/,
+        jclass /*unused*/,
+        jlong kortholtHandle) {
+    delete reinterpret_cast<Kortholt *>(kortholtHandle);
 }
 
 JNIEXPORT void JNICALL
 Java_net_simno_kortholt_Kortholt_nativeSetDefaultStreamValues(
-        JNIEnv *env,
-        jclass type,
+        JNIEnv /*unused*/,
+        jclass /*unused*/,
         jint sampleRate,
         jint framesPerBurst) {
     oboe::DefaultStreamValues::SampleRate = (int32_t) sampleRate;

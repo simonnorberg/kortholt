@@ -9,8 +9,6 @@ class Kortholt : oboe::AudioStreamCallback {
 public:
     Kortholt();
 
-    ~Kortholt();
-
     oboe::DataCallbackResult
     onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames);
 
@@ -21,10 +19,11 @@ private:
     std::unique_ptr<oboe::LatencyTuner> latencyTuner;
     std::unique_ptr<float[]> conversionBuffer{nullptr};
     std::unique_ptr<pd::PdBase> pdBase;
+    int ticksPerBuffer;
 
     void createPlaybackStream(oboe::AudioStreamBuilder *builder);
 
-    void restartStream(oboe::AudioStreamBuilder *builder);
+    int calculateTicksPerBuffer();
 };
 
 #endif //KORTHOLT_H

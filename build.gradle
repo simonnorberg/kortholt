@@ -1,6 +1,6 @@
 buildscript {
     ext.versions = [
-            'kotlin'     : '1.3.41',
+            'kotlin'     : '1.3.50',
             'compile_sdk': 29,
             'min_sdk'    : 17,
             'target_sdk' : 29,
@@ -14,7 +14,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0-rc03'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
     }
 }

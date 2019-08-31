@@ -1,7 +1,7 @@
 version: 2.0
 
 workspace: &workspace
-  ~/kortholt
+             ~/kortholt
 
 config_android: &config_android
   docker:
@@ -17,10 +17,7 @@ update_sdk: &update_sdk
     name: Update SDK
     command: |
       yes | sdkmanager --licenses || true
-      sdkmanager "platform-tools" "platforms;android-29"
-
-cache_key: &cache_key
-  key: key-{{ checksum "build.gradle" }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      sdkmanager "build-tools;29.0.2" "platform-tools" "platforms;android-29"
 
 jobs:
   build:
@@ -29,30 +26,16 @@ jobs:
       - <<: *update_sdk
       - checkout
 
-      - restore_cache:
-          <<: *cache_key
+      - run:
+          name: Init libpd and Oboe submodules
+          command: git submodule update --init --recursive
 
-      - run: git submodule update --init --recursive
-      - run: ./gradlew dependencies
-      - run: ./gradlew assembleRelease
-      - run: ./gradlew install
-
-      - save_cache:
-          <<: *cache_key
-          paths:
-            - ~/.gradle
-
-      - store_artifacts:
-          path: build/outputs/aar
-          destination: aar
-      - store_artifacts:
-          path: build/libs
-          destination: libs
-      - store_artifacts:
-          path: build/poms
-          destination: pom
+      - run:
+          name: Build Kortholt library
+          command: ./gradlew clean assembleRelease install
 
       - deploy:
+          name: Deploy artifacts to Bintray
           command: |
             if [ ${CIRCLE_BRANCH} == "master" ]; then
               ./gradlew bintrayUpload

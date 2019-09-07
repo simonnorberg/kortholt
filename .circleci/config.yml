@@ -5,7 +5,7 @@ workspace: &workspace
 
 config_android: &config_android
   docker:
-    - image: simonnorberg/circleci-android:api-29-ndk
+    - image: circleci/android:api-29-ndk
   working_directory: *workspace
   environment:
     JAVA_TOOL_OPTIONS: "-Xmx1024m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
@@ -27,15 +27,15 @@ jobs:
       - checkout
 
       - run:
-          name: Init libpd and Oboe submodules
+          name: Update submodules
           command: git submodule update --init --recursive
 
       - run:
-          name: Build Kortholt library
+          name: Build artifacts
           command: ./gradlew clean assembleRelease install
 
       - deploy:
-          name: Deploy artifacts to Bintray
+          name: Upload to Bintray
           command: |
             if [ ${CIRCLE_BRANCH} == "master" ]; then
               ./gradlew bintrayUpload

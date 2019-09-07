@@ -6,8 +6,8 @@ buildscript {
             'target_sdk' : 29,
             'build_tools': '29.0.2',
             'annotation' : '1.1.0',
-            'appcompat'  : '1.1.0-rc01',
-            'core_ktx'   : '1.1.0-rc03'
+            'appcompat'  : '1.1.0',
+            'core_ktx'   : '1.1.0'
     ]
     repositories {
         google()
@@ -20,7 +20,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.ben-manes.versions' version '0.23.0'
+    id 'com.github.ben-manes.versions' version '0.24.0'
 }
 
 allprojects {

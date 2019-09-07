@@ -5,10 +5,16 @@
 #include "Kortholt.h"
 #include "oboe/src/common/OboeDebug.h"
 
+const int STATE_CHANGE_TIMEOUT = 400;
+
 Kortholt::Kortholt() {
     ticksPerBuffer = calculateTicksPerBuffer();
     oboe::AudioStreamBuilder builder = oboe::AudioStreamBuilder();
     createPlaybackStream(&builder);
+}
+
+Kortholt::~Kortholt() {
+    playStream->stop(STATE_CHANGE_TIMEOUT);
 }
 
 void Kortholt::createPlaybackStream(oboe::AudioStreamBuilder *builder) {
@@ -43,7 +49,7 @@ void Kortholt::createPlaybackStream(oboe::AudioStreamBuilder *builder) {
         latencyTuner = std::make_unique<oboe::LatencyTuner>(*playStream);
 
         // Start the stream - the dataCallback function will start being called
-        result = playStream->requestStart();
+        result = playStream->start(STATE_CHANGE_TIMEOUT);
         if (result != oboe::Result::OK) {
             LOGE("Error starting stream. %s", oboe::convertToText(result));
         }

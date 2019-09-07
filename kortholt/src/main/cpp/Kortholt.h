@@ -9,6 +9,8 @@ class Kortholt : oboe::AudioStreamCallback {
 public:
     Kortholt();
 
+    ~Kortholt();
+
     oboe::DataCallbackResult
     onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames);
 

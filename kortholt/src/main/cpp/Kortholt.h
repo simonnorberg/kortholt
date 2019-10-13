@@ -7,7 +7,7 @@
 class Kortholt : oboe::AudioStreamCallback {
 
 public:
-    Kortholt();
+    Kortholt(std::vector<int> cpuIds);
 
     ~Kortholt();
 
@@ -21,11 +21,15 @@ private:
     std::unique_ptr<oboe::LatencyTuner> latencyTuner;
     std::unique_ptr<float[]> conversionBuffer{nullptr};
     std::unique_ptr<pd::PdBase> pdBase;
-    int ticksPerBuffer;
+    int32_t ticksPerBuffer;
+    std::vector<int> cpuIds;
+    std::atomic<bool> isThreadAffinitySet{false};
 
     void createPlaybackStream(oboe::AudioStreamBuilder *builder);
 
-    int calculateTicksPerBuffer();
+    int32_t calculateTicksPerBuffer();
+
+    void setThreadAffinity();
 };
 
 #endif //KORTHOLT_H

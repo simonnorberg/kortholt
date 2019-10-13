@@ -225,6 +225,4 @@ target_include_directories(
     libpd/libpd_wrapper/util
 )
 target_link_libraries(kortholt android log libpd oboe)
-# Enable optimization flags: if having problems with source level debugging,
-# disable -Ofast ( and debug ), re-enable after done debugging.
-target_compile_options(kortholt PRIVATE -Wall -Werror "$<$<CONFIG:RELEASE>:-Ofast>")
+target_compile_options(kortholt PRIVATE -Wall -Werror -Ofast)

@@ -1,9 +1,9 @@
 package net.simno.kortholt
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import org.puredata.core.PdBase
 
 class SampleActivity : AppCompatActivity() {
@@ -15,8 +15,12 @@ class SampleActivity : AppCompatActivity() {
         PdBaseHelper.openPatch(this, R.raw.test, "test.pd")
 
         findViewById<CheckBox>(R.id.play_box).setOnCheckedChangeListener { _, isChecked ->
-            Intent(this, SampleService::class.java).let { intent ->
-                if (isChecked) startService(intent) else stopService(intent)
+            SampleService.intent(this).let { intent ->
+                if (isChecked) {
+                    ContextCompat.startForegroundService(this, intent)
+                } else {
+                    stopService(intent)
+                }
             }
         }
         findViewById<CheckBox>(R.id.left_box).setOnCheckedChangeListener { _, isChecked ->
@@ -28,7 +32,7 @@ class SampleActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        stopService(Intent(this, SampleService::class.java))
+        stopService(SampleService.intent(this))
         PdBaseHelper.closePatch()
         super.onDestroy()
     }

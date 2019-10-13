@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -18,12 +19,12 @@ class SampleService : Service() {
         Kortholt.create(this)
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         startForeground(NOTIFICATION_ID, createNotification())
         return START_STICKY
     }
 
-    override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent): IBinder? = null
 
     override fun onDestroy() {
         Kortholt.destroy()
@@ -45,11 +46,14 @@ class SampleService : Service() {
             .setContentText("The Kortholt sample is running!")
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.drawable.ic_stat_play)
+            .setOngoing(true)
             .build()
     }
 
     companion object {
         private const val NOTIFICATION_ID = 1337
         private const val CHANNEL_ID = "1337"
+
+        fun intent(context: Context): Intent = Intent(context, SampleService::class.java)
     }
 }

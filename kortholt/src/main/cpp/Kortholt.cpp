@@ -1,14 +1,15 @@
 #include <cinttypes>
 #include <memory>
 #include <cmath>
-
 #include "Kortholt.h"
 #include "oboe/src/common/OboeDebug.h"
 
 const int STATE_CHANGE_TIMEOUT = 400;
+const int DEFAULT_TICKS_PER_BUFFER = 8;
 
-Kortholt::Kortholt() {
-    ticksPerBuffer = calculateTicksPerBuffer();
+Kortholt::Kortholt(std::vector<int> cpuIds) {
+    this->cpuIds = std::move(cpuIds);
+    this->ticksPerBuffer = calculateTicksPerBuffer();
     oboe::AudioStreamBuilder builder = oboe::AudioStreamBuilder();
     createPlaybackStream(&builder);
 }
@@ -20,7 +21,8 @@ Kortholt::~Kortholt() {
 void Kortholt::createPlaybackStream(oboe::AudioStreamBuilder *builder) {
     int bufferSize = ticksPerBuffer * pd::PdBase::blockSize();
 
-    oboe::Result result = builder->setChannelCount(oboe::ChannelCount::Stereo)
+    oboe::Result result = builder
+            ->setChannelCount(oboe::ChannelCount::Stereo)
             ->setDirection(oboe::Direction::Output)
             ->setSharingMode(oboe::SharingMode::Exclusive)
             ->setPerformanceMode(oboe::PerformanceMode::LowLatency)
@@ -39,16 +41,13 @@ void Kortholt::createPlaybackStream(oboe::AudioStreamBuilder *builder) {
             conversionBuffer = std::make_unique<float[]>(static_cast<size_t>(conversionBufferSize));
         }
 
-        // Initialize libpd
         pdBase = std::make_unique<pd::PdBase>();
         if (pdBase->init(0, playStream->getChannelCount(), playStream->getSampleRate(), false)) {
             pdBase->computeAudio(true);
         }
 
-        // Create a latency tuner which will automatically tune our buffer size.
         latencyTuner = std::make_unique<oboe::LatencyTuner>(*playStream);
 
-        // Start the stream - the dataCallback function will start being called
         result = playStream->start(STATE_CHANGE_TIMEOUT);
         if (result != oboe::Result::OK) {
             LOGE("Error starting stream. %s", oboe::convertToText(result));
@@ -60,6 +59,11 @@ void Kortholt::createPlaybackStream(oboe::AudioStreamBuilder *builder) {
 
 oboe::DataCallbackResult
 Kortholt::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
+    if (!isThreadAffinitySet) {
+        setThreadAffinity();
+        isThreadAffinitySet = true;
+    }
+
     latencyTuner->tune();
 
     bool is16BitFormat = (audioStream->getFormat() == oboe::AudioFormat::I16);
@@ -86,11 +90,37 @@ void Kortholt::onErrorAfterClose(oboe::AudioStream *oboeStream, oboe::Result err
     }
 }
 
-int Kortholt::calculateTicksPerBuffer() {
+int32_t Kortholt::calculateTicksPerBuffer() {
     // Calculate buffer size. A multiple of PdBase::blockSize (64) works best.
     int blockSize = pd::PdBase::blockSize();
     int framesPerBurst = oboe::DefaultStreamValues::FramesPerBurst;
-    float bufferSize = framesPerBurst > blockSize ? framesPerBurst : blockSize * 8;
-    int ticks = static_cast<int>(ceil(bufferSize / blockSize)) * 2;
-    return ticks;
+    float bufferSize = framesPerBurst > blockSize
+                       ? framesPerBurst
+                       : blockSize * DEFAULT_TICKS_PER_BUFFER;
+    return static_cast<int32_t>(ceil(bufferSize / blockSize)) * 2;
+}
+
+void Kortholt::setThreadAffinity() {
+    pid_t current_thread_id = gettid();
+    cpu_set_t cpu_set;
+    CPU_ZERO(&cpu_set);
+
+    if (cpuIds.empty()) {
+        int current_cpu_id = sched_getcpu();
+        LOGD("Binding to current CPU ID %d", current_cpu_id);
+        CPU_SET(current_cpu_id, &cpu_set);
+    } else {
+        LOGD("Binding to %d CPU IDs", static_cast<int>(cpuIds.size()));
+        for (int cpu_id : cpuIds) {
+            LOGD("CPU ID %d added to cores set", cpu_id);
+            CPU_SET(cpu_id, &cpu_set);
+        }
+    }
+
+    int result = sched_setaffinity(current_thread_id, sizeof(cpu_set_t), &cpu_set);
+    if (result == 0) {
+        LOGV("Thread affinity set");
+    } else {
+        LOGW("Error setting thread affinity. Error no: %d", result);
+    }
 }

@@ -47,6 +47,7 @@ class SampleService : Service() {
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.drawable.ic_stat_play)
             .setOngoing(true)
+            .setOnlyAlertOnce(true)
             .build()
     }
 

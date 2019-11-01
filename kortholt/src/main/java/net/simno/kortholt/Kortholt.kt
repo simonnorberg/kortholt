@@ -6,25 +6,24 @@ import android.media.AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER
 import android.media.AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE
 import android.os.Build
 import androidx.core.content.getSystemService
+import java.util.concurrent.atomic.AtomicLong
 
 object Kortholt {
 
-    private var kortholtHandle = 0L
+    private val kortholtHandle = AtomicLong(0L)
 
     init {
         System.loadLibrary("kortholt")
     }
 
     fun create(context: Context) {
+        destroy()
         setDefaultStreamValues(context)
-        kortholtHandle = nativeCreateKortholt(getExclusiveCores())
+        kortholtHandle.set(nativeCreateKortholt(getExclusiveCores()))
     }
 
     fun destroy() {
-        if (kortholtHandle != 0L) {
-            nativeDeleteKortholt(kortholtHandle)
-            kortholtHandle = 0L
-        }
+        kortholtHandle.getAndSet(0L).takeIf { it != 0L }?.let { nativeDeleteKortholt(it) }
     }
 
     private fun setDefaultStreamValues(context: Context) {

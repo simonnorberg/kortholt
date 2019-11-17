@@ -1,20 +1,21 @@
 package net.simno.kortholt
 
 import android.os.Bundle
-import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import net.simno.kortholt.databinding.SampleActivityBinding
 import org.puredata.core.PdBase
 
 class SampleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sample)
+        val binding = SampleActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         PdBaseHelper.openPatch(this, R.raw.test, "test.pd")
 
-        findViewById<CheckBox>(R.id.play_box).setOnCheckedChangeListener { _, isChecked ->
+        binding.playBox.setOnCheckedChangeListener { _, isChecked ->
             SampleService.intent(this).let { intent ->
                 if (isChecked) {
                     ContextCompat.startForegroundService(this, intent)
@@ -23,10 +24,10 @@ class SampleActivity : AppCompatActivity() {
                 }
             }
         }
-        findViewById<CheckBox>(R.id.left_box).setOnCheckedChangeListener { _, isChecked ->
+        binding.leftBox.setOnCheckedChangeListener { _, isChecked ->
             PdBase.sendFloat("left", if (isChecked) 1F else 0F)
         }
-        findViewById<CheckBox>(R.id.right_box).setOnCheckedChangeListener { _, isChecked ->
+        binding.rightBox.setOnCheckedChangeListener { _, isChecked ->
             PdBase.sendFloat("right", if (isChecked) 1F else 0F)
         }
     }

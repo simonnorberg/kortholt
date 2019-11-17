@@ -20,7 +20,7 @@ extern "C" {
 JNIEXPORT jlong JNICALL
 Java_net_simno_kortholt_Kortholt_nativeCreateKortholt(
         JNIEnv *env,
-        jclass /*unused*/,
+        jobject /*unused*/,
         jintArray jCpuIds) {
     std::vector<int> cpuIds = convertJavaArrayToVector(env, jCpuIds);
     auto *kortholt = new(std::nothrow) Kortholt(std::move(cpuIds));
@@ -29,16 +29,16 @@ Java_net_simno_kortholt_Kortholt_nativeCreateKortholt(
 
 JNIEXPORT void JNICALL
 Java_net_simno_kortholt_Kortholt_nativeDeleteKortholt(
-        JNIEnv /*unused*/,
-        jclass /*unused*/,
+        JNIEnv * /*unused*/,
+        jobject /*unused*/,
         jlong kortholtHandle) {
     delete reinterpret_cast<Kortholt *>(kortholtHandle);
 }
 
 JNIEXPORT void JNICALL
 Java_net_simno_kortholt_Kortholt_nativeSetDefaultStreamValues(
-        JNIEnv /*unused*/,
-        jclass /*unused*/,
+        JNIEnv * /*unused*/,
+        jobject /*unused*/,
         jint sampleRate,
         jint framesPerBurst) {
     oboe::DefaultStreamValues::SampleRate = (int32_t) sampleRate;

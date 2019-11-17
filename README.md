@@ -27,6 +27,6 @@ See [Sample](https://github.com/simonnorberg/kortholt/tree/master/sample) for de
 
 ```groovy
 dependencies {
-    implementation 'net.simno.kortholt:kortholt:1.1.3'
+    implementation 'net.simno.kortholt:kortholt:1.1.4'
 }
 ```

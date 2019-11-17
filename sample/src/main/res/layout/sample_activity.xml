@@ -7,21 +7,21 @@
     tools:context=".SampleActivity">
 
     <CheckBox
-        android:id="@+id/play_box"
+        android:id="@+id/playBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="false"
         android:text="@string/play_label" />
 
     <CheckBox
-        android:id="@+id/left_box"
+        android:id="@+id/leftBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="@string/left_label" />
 
     <CheckBox
-        android:id="@+id/right_box"
+        android:id="@+id/rightBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"

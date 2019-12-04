@@ -27,6 +27,8 @@ void Kortholt::createPlaybackStream(oboe::AudioStreamBuilder *builder) {
             ->setSharingMode(oboe::SharingMode::Exclusive)
             ->setPerformanceMode(oboe::PerformanceMode::LowLatency)
             ->setFormat(oboe::AudioFormat::Float)
+            ->setFormatConversionAllowed(true)
+            ->setChannelConversionAllowed(true)
             ->setFramesPerCallback(bufferSize)
             ->setCallback(this)
             ->openManagedStream(playStream);

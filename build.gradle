@@ -4,6 +4,7 @@ buildscript {
             'compile_sdk': 29,
             'min_sdk'    : 17,
             'target_sdk' : 29,
+            'ndk'        : '20.1.5948944',
             'build_tools': '29.0.2',
             'annotation' : '1.1.0',
             'appcompat'  : '1.1.0',
@@ -14,7 +15,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.0-beta04'
+        classpath 'com.android.tools.build:gradle:3.6.0-beta05'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
     }
 }

@@ -43,7 +43,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    implementation 'net.simno.kortholt:kortholt:1.2.0'
+    implementation 'net.simno.kortholt:kortholt:1.3.0'
 }
 ```
 

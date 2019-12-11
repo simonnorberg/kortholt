@@ -77,6 +77,7 @@ set(PD_SOURCES
     libpd/pure-data/src/s_inter.c
     libpd/pure-data/src/s_loader.c
     libpd/pure-data/src/s_main.c
+    libpd/pure-data/src/s_net.c
     libpd/pure-data/src/s_path.c
     libpd/pure-data/src/s_print.c
     libpd/pure-data/src/s_stuff.h

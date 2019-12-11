@@ -17,7 +17,7 @@ update_sdk: &update_sdk
     name: Update SDK
     command: |
       yes | sdkmanager --licenses || true
-      sdkmanager "build-tools;29.0.2" "platform-tools" "platforms;android-29"
+      sdkmanager "build-tools;29.0.2" "platform-tools" "platforms;android-29" "ndk;20.1.5948944"
 
 jobs:
   build:

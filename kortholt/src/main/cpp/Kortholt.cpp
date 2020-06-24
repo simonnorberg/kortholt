@@ -2,7 +2,6 @@
 #include <memory>
 #include <cmath>
 #include "Kortholt.h"
-#include "oboe/src/common/OboeDebug.h"
 
 const int STATE_CHANGE_TIMEOUT = 400;
 const int DEFAULT_TICKS_PER_BUFFER = 8;
@@ -50,12 +49,7 @@ void Kortholt::createPlaybackStream(oboe::AudioStreamBuilder *builder) {
 
         latencyTuner = std::make_unique<oboe::LatencyTuner>(*playStream);
 
-        result = playStream->start(STATE_CHANGE_TIMEOUT);
-        if (result != oboe::Result::OK) {
-            LOGE("Error starting stream. %s", oboe::convertToText(result));
-        }
-    } else {
-        LOGE("Failed to create stream. %s", oboe::convertToText(result));
+        playStream->start(STATE_CHANGE_TIMEOUT);
     }
 }
 
@@ -94,8 +88,8 @@ void Kortholt::onErrorAfterClose(oboe::AudioStream *oboeStream, oboe::Result err
 
 int32_t Kortholt::calculateTicksPerBuffer() {
     // Calculate buffer size. A multiple of PdBase::blockSize (64) works best.
-    int blockSize = pd::PdBase::blockSize();
-    int framesPerBurst = oboe::DefaultStreamValues::FramesPerBurst;
+    auto blockSize = pd::PdBase::blockSize();
+    auto framesPerBurst = oboe::DefaultStreamValues::FramesPerBurst;
     float bufferSize = framesPerBurst > blockSize
                        ? framesPerBurst
                        : blockSize * DEFAULT_TICKS_PER_BUFFER;
@@ -109,20 +103,12 @@ void Kortholt::setThreadAffinity() {
 
     if (cpuIds.empty()) {
         int current_cpu_id = sched_getcpu();
-        LOGD("Binding to current CPU ID %d", current_cpu_id);
         CPU_SET(current_cpu_id, &cpu_set);
     } else {
-        LOGD("Binding to %d CPU IDs", static_cast<int>(cpuIds.size()));
         for (int cpu_id : cpuIds) {
-            LOGD("CPU ID %d added to cores set", cpu_id);
             CPU_SET(cpu_id, &cpu_set);
         }
     }
 
-    int result = sched_setaffinity(current_thread_id, sizeof(cpu_set_t), &cpu_set);
-    if (result == 0) {
-        LOGV("Thread affinity set");
-    } else {
-        LOGW("Error setting thread affinity. Error no: %d", result);
-    }
+    sched_setaffinity(current_thread_id, sizeof(cpu_set_t), &cpu_set);
 }

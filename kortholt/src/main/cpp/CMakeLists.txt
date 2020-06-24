@@ -199,16 +199,7 @@ target_link_libraries(pdnative libpd)
 ### END INCLUDE LIBPD ###
 
 ### BEGIN INCLUDE OBOE ###
-
-# Set the path to the Oboe library directory
-set(OBOE_DIR ./oboe)
-
-# Add the Oboe library as a subproject.
-add_subdirectory(${OBOE_DIR} ./oboe)
-
-# Include the Oboe headers
-include_directories(${OBOE_DIR}/include)
-
+find_package(oboe REQUIRED CONFIG)
 ### END INCLUDE OBOE ###
 
 ### KORTHOLT ###
@@ -221,9 +212,8 @@ add_library(
 target_include_directories(
     kortholt
     PRIVATE
-    oboe/src/common
     libpd/cpp
     libpd/libpd_wrapper/util
 )
-target_link_libraries(kortholt android log libpd oboe)
+target_link_libraries(kortholt android log libpd oboe::oboe)
 target_compile_options(kortholt PRIVATE -Wall -Werror -Ofast)

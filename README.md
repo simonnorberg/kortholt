@@ -1,4 +1,4 @@
-# Kortholt [![CircleCI](https://circleci.com/gh/simonnorberg/kortholt.svg?style=svg)](https://circleci.com/gh/simonnorberg/kortholt) [![Download](https://api.bintray.com/packages/simonnorberg/maven/kortholt/images/download.svg)](https://bintray.com/simonnorberg/maven/kortholt/_latestVersion)
+# Kortholt [![Android CI](https://github.com/simonnorberg/kortholt/workflows/Android%20CI/badge.svg)](https://github.com/simonnorberg/kortholt/actions) [![Download](https://api.bintray.com/packages/simonnorberg/maven/kortholt/images/download.svg)](https://bintray.com/simonnorberg/maven/kortholt/_latestVersion)
 
 Pure Data for Android with [libpd](https://github.com/libpd/libpd) and [Oboe](https://github.com/google/oboe).
 
@@ -43,7 +43,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    implementation 'net.simno.kortholt:kortholt:1.4.0'
+    implementation 'net.simno.kortholt:kortholt:1.5.0'
 }
 ```
 

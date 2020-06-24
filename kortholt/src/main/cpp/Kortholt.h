@@ -27,7 +27,7 @@ private:
 
     void createPlaybackStream(oboe::AudioStreamBuilder *builder);
 
-    int32_t calculateTicksPerBuffer();
+    static int32_t calculateTicksPerBuffer();
 
     void setThreadAffinity();
 };

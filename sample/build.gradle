@@ -1,9 +1,10 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
 
 android {
     compileSdkVersion versions.compile_sdk
-    buildToolsVersion versions.build_tools
     defaultConfig {
         applicationId "net.simno.kortholt"
         minSdkVersion versions.min_sdk
@@ -22,7 +23,7 @@ android {
 
 dependencies {
     implementation project(':kortholt')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "androidx.core:core-ktx:$versions.core"
 }

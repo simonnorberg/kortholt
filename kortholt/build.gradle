@@ -1,22 +1,20 @@
 plugins {
-    id 'com.github.dcendents.android-maven' version '2.1'
-    id 'com.jfrog.bintray' version '1.8.4'
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'maven-publish'
+    id 'com.jfrog.bintray' version '1.8.5'
 }
-
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion versions.compile_sdk
-    buildToolsVersion versions.build_tools
     ndkVersion versions.ndk
     defaultConfig {
         minSdkVersion versions.min_sdk
         targetSdkVersion versions.target_sdk
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++14"
-                arguments '-DANDROID_STL=c++_static'
+                cppFlags '-std=c++14'
+                arguments '-DANDROID_STL=c++_shared'
                 abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
             }
         }
@@ -35,10 +33,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    libraryVariants.all {
-        it.generateBuildConfigProvider.configure { task ->
-            task.enabled = false
-        }
+    buildFeatures {
+        buildConfig false
+        prefab true
     }
 }
 
@@ -46,32 +43,39 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     api "androidx.annotation:annotation:$versions.annotation"
     api "androidx.core:core-ktx:$versions.core"
+    api "com.google.oboe:oboe:$versions.oboe"
 }
 
 def siteUrl = 'https://github.com/simonnorberg/kortholt'
 def gitUrl = 'https://github.com/simonnorberg/kortholt.git'
 
-version = '1.4.0'
+version = '1.5.0'
 group = 'net.simno.kortholt'
-archivesBaseName = 'kortholt'
 
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                name 'kortholt'
-                url siteUrl
-                licenses {
-                    license {
-                        name 'Apache-2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'net.simno.kortholt'
+                artifactId = 'kortholt'
+                version = '1.5.0'
+
+                pom {
+                    name = 'kortholt'
+                    url = siteUrl
+                    licenses {
+                        license {
+                            name = 'Apache-2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
                     }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
+                    scm {
+                        connection = gitUrl
+                        developerConnection = gitUrl
+                        url = siteUrl
+                    }
                 }
             }
         }
@@ -99,10 +103,16 @@ artifacts {
     archives sourcesJar
 }
 
+Object propOrDef(String propertyName, Object defaultValue) {
+    def propertyValue = project.properties[propertyName]
+    return propertyValue != null ? propertyValue : defaultValue
+}
+
 bintray {
     user = 'simonnorberg'
-    setKey(System.getenv("BINTRAY_KEY"))
+    setKey(propOrDef("BINTRAY_KEY", ""))
     setConfigurations('archives')
+    publications = ['release']
     pkg {
         repo = 'maven'
         name = 'kortholt'

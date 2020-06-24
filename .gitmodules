@@ -1,6 +1,3 @@
-[submodule "kortholt/src/main/cpp/oboe"]
-	path = kortholt/src/main/cpp/oboe
-	url = https://github.com/simonnorberg/oboe.git
 [submodule "kortholt/src/main/cpp/libpd"]
 	path = kortholt/src/main/cpp/libpd
 	url = https://github.com/simonnorberg/libpd.git

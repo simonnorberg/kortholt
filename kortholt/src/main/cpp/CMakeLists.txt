@@ -186,8 +186,8 @@ target_compile_definitions(libpd        PRIVATE ${LIBPD_COMPILE_DEFINITIONS})
 # link against necessary libraries
 target_link_libraries(libpd PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 
-find_library(MATH_LIB m)
-target_link_libraries(libpd PUBLIC ${MATH_LIB})
+find_library(M m)
+target_link_libraries(libpd PUBLIC ${M_LIBRARIES})
 
 set(PD_NATIVE_SOURCES
     libpd/jni/z_jni_plain.c

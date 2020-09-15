@@ -49,7 +49,7 @@ dependencies {
 def siteUrl = 'https://github.com/simonnorberg/kortholt'
 def gitUrl = 'https://github.com/simonnorberg/kortholt.git'
 
-version = '1.5.0'
+version = '1.6.0'
 group = 'net.simno.kortholt'
 
 afterEvaluate {
@@ -60,7 +60,7 @@ afterEvaluate {
 
                 groupId = 'net.simno.kortholt'
                 artifactId = 'kortholt'
-                version = '1.5.0'
+                version = '1.6.0'
 
                 pom {
                     name = 'kortholt'

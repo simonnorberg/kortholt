@@ -199,21 +199,37 @@ target_link_libraries(pdnative libpd)
 ### END INCLUDE LIBPD ###
 
 ### BEGIN INCLUDE OBOE ###
-find_package(oboe REQUIRED CONFIG)
+
+set(OBOE_DIR ./oboe)
+add_subdirectory(${OBOE_DIR} ./oboe)
+include_directories(${OBOE_DIR}/include ${OBOE_DIR}/samples/shared ${OBOE_DIR}/samples/hello-oboe/src/main/cpp)
+
+# Debug utilities
+set(DEBUG_UTILS_PATH "${OBOE_DIR}/samples/debug-utils")
+set(DEBUG_UTILS_SOURCES ${DEBUG_UTILS_PATH}/trace.cpp)
+include_directories(${DEBUG_UTILS_PATH})
+
 ### END INCLUDE OBOE ###
 
 ### KORTHOLT ###
+set(APP_SOURCES
+    jni_bridge.cpp
+    PureDataSource.cpp
+    Kortholt.cpp
+    ${OBOE_DIR}/samples/hello-oboe/src/main/cpp/LatencyTuningCallback.cpp
+)
 add_library(
     kortholt
     SHARED
-    jni_bridge.cpp
-    Kortholt.cpp
+    ${DEBUG_UTILS_SOURCES}
+    ${APP_SOURCES}
 )
 target_include_directories(
     kortholt
     PRIVATE
+    oboe/src/common
     libpd/cpp
     libpd/libpd_wrapper/util
 )
-target_link_libraries(kortholt android log libpd oboe::oboe)
+target_link_libraries(kortholt android log libpd oboe)
 target_compile_options(kortholt PRIVATE -Wall -Werror -Ofast)

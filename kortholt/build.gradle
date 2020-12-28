@@ -35,7 +35,6 @@ android {
     }
     buildFeatures {
         buildConfig false
-        prefab true
     }
 }
 
@@ -43,13 +42,12 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     api "androidx.annotation:annotation:$versions.annotation"
     api "androidx.core:core-ktx:$versions.core"
-    api "com.google.oboe:oboe:$versions.oboe"
 }
 
 def siteUrl = 'https://github.com/simonnorberg/kortholt'
 def gitUrl = 'https://github.com/simonnorberg/kortholt.git'
 
-version = '1.6.0'
+version = '1.7.0'
 group = 'net.simno.kortholt'
 
 afterEvaluate {
@@ -60,7 +58,7 @@ afterEvaluate {
 
                 groupId = 'net.simno.kortholt'
                 artifactId = 'kortholt'
-                version = '1.6.0'
+                version = '1.7.0'
 
                 pom {
                     name = 'kortholt'

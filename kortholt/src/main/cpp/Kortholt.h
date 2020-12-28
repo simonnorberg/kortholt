@@ -3,33 +3,36 @@
 
 #include <oboe/Oboe.h>
 #include <PdBase.hpp>
+#include <IRestartable.h>
+#include <DefaultErrorCallback.h>
+#include <LatencyTuningCallback.h>
+#include "PureDataSource.h"
 
-class Kortholt : oboe::AudioStreamCallback {
+class Kortholt : public IRestartable {
 
 public:
     Kortholt(std::vector<int> cpuIds);
 
-    ~Kortholt();
+    virtual ~Kortholt();
 
-    oboe::DataCallbackResult
-    onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames);
-
-    void onErrorAfterClose(oboe::AudioStream *oboeStream, oboe::Result error);
+    virtual void restart() override;
 
 private:
-    oboe::ManagedStream playStream;
-    std::unique_ptr<oboe::LatencyTuner> latencyTuner;
-    std::unique_ptr<float[]> conversionBuffer{nullptr};
-    std::unique_ptr<pd::PdBase> pdBase;
+    std::mutex streamLock;
+    std::shared_ptr<oboe::AudioStream> stream;
+    std::shared_ptr<PureDataSource> pureDataSource;
+    std::unique_ptr<LatencyTuningCallback> dataCallback;
+    std::unique_ptr<DefaultErrorCallback> errorCallback;
     int32_t ticksPerBuffer;
-    std::vector<int> cpuIds;
-    std::atomic<bool> isThreadAffinitySet{false};
+    int32_t bufferSize;
 
-    void createPlaybackStream(oboe::AudioStreamBuilder *builder);
+    oboe::Result createPlaybackStream();
+
+    void start();
+
+    void stop();
 
     static int32_t calculateTicksPerBuffer();
-
-    void setThreadAffinity();
 };
 
 #endif //KORTHOLT_H

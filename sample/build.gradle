@@ -23,7 +23,5 @@ android {
 
 dependencies {
     implementation project(':kortholt')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
-    implementation "androidx.core:core-ktx:$versions.core"
 }

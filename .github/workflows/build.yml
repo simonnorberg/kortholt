@@ -18,12 +18,12 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Update submodule
+      - name: Update submodules
         run: git submodule update --init --recursive
 
       - name: Build and publish
         run: ./gradlew publishToMavenLocal
 
       - name: Upload to Bintray
-        if: startsWith(github.ref, 'refs/heads/master')
+        if: startsWith(github.ref, 'refs/heads/main')
         run: ./gradlew bintrayUpload

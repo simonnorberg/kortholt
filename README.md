@@ -34,7 +34,7 @@ Kortholt.destroy()
 PdBaseHelper.closePatch()
 ```
 
-See [Sample](https://github.com/simonnorberg/kortholt/tree/master/sample) for detailed usage.
+See [Sample](https://github.com/simonnorberg/kortholt/tree/main/sample) for detailed usage.
 
 ## Download
 
@@ -43,7 +43,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    implementation 'net.simno.kortholt:kortholt:1.6.0'
+    implementation 'net.simno.kortholt:kortholt:1.7.0'
 }
 ```
 

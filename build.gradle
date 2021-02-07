@@ -1,6 +1,6 @@
 buildscript {
     ext.versions = [
-            'kotlin'     : '1.4.21',
+            'kotlin'     : '1.4.30',
             'compile_sdk': 30,
             'min_sdk'    : 17,
             'target_sdk' : 30,
@@ -14,7 +14,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:4.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
     }
 }

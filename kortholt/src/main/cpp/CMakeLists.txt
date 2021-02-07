@@ -109,6 +109,8 @@ set(PD_EXTRA_SOURCES
     libpd/pure-data/extra/fiddle~/fiddle~.c
     libpd/pure-data/extra/loop~/loop~.c
     libpd/pure-data/extra/lrshift~/lrshift~.c
+    libpd/pure-data/extra/pd~/pdsched.c
+    libpd/pure-data/extra/pd~/pd~.c
     libpd/pure-data/extra/pique/pique.c
     libpd/pure-data/extra/sigmund~/sigmund~.c
     libpd/pure-data/extra/stdout/stdout.c

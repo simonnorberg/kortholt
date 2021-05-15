@@ -1,4 +1,4 @@
-# Kortholt [![Android CI](https://github.com/simonnorberg/kortholt/workflows/Android%20CI/badge.svg)](https://github.com/simonnorberg/kortholt/actions) [![Download](https://api.bintray.com/packages/simonnorberg/maven/kortholt/images/download.svg)](https://bintray.com/simonnorberg/maven/kortholt/_latestVersion)
+# Kortholt [![Android CI](https://github.com/simonnorberg/kortholt/workflows/Android%20CI/badge.svg)](https://github.com/simonnorberg/kortholt/actions) [![Maven Central](https://img.shields.io/maven-central/v/net.simno.kortholt/kortholt)](https://search.maven.org/artifact/net.simno.kortholt/kortholt)
 
 Pure Data for Android with [libpd](https://github.com/libpd/libpd) and [Oboe](https://github.com/google/oboe).
 
@@ -40,10 +40,10 @@ See [Sample](https://github.com/simonnorberg/kortholt/tree/main/sample) for deta
 
 ```groovy
 repositories {
-    jcenter()
+    mavenCentral()
 }
 dependencies {
-    implementation 'net.simno.kortholt:kortholt:1.8.0'
+    implementation 'net.simno.kortholt:kortholt:1.9.0'
 }
 ```
 

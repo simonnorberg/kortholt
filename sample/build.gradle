@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    buildToolsVersion versions.build_tools
     compileSdkVersion versions.compile_sdk
     defaultConfig {
         applicationId "net.simno.kortholt"

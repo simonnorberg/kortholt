@@ -6,6 +6,7 @@ plugins {
 }
 
 android {
+    buildToolsVersion versions.build_tools
     compileSdkVersion versions.compile_sdk
     ndkVersion versions.ndk
     defaultConfig {

@@ -1,12 +1,11 @@
 plugins {
     id 'com.android.library'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
     id 'maven-publish'
     id 'signing'
 }
 
 android {
-    buildToolsVersion versions.build_tools
     compileSdkVersion versions.compile_sdk
     ndkVersion versions.ndk
     defaultConfig {
@@ -31,16 +30,23 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
         buildConfig false
     }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    lintOptions {
+        disable 'GradleDependency'
+    }
 }
 
 dependencies {
-    api "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     api "androidx.annotation:annotation:$versions.annotation"
     api "androidx.core:core-ktx:$versions.core"
 }
@@ -48,7 +54,7 @@ dependencies {
 def siteUrl = 'https://github.com/simonnorberg/kortholt'
 def gitUrl = 'https://github.com/simonnorberg/kortholt.git'
 
-version = '1.9.0'
+version = '1.10.0'
 group = 'net.simno.kortholt'
 
 afterEvaluate {
@@ -59,7 +65,7 @@ afterEvaluate {
 
                 groupId = 'net.simno.kortholt'
                 artifactId = 'kortholt'
-                version = '1.9.0'
+                version = '1.10.0'
 
                 pom {
                     name = 'kortholt'

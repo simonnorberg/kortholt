@@ -6,11 +6,15 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.media.MediaMetadata
 import android.os.IBinder
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 
 class SampleService : Service() {
 
@@ -34,24 +38,32 @@ class SampleService : Service() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannelCompat.Builder(CHANNEL_ID, IMPORTANCE_LOW)
-                .setName("Playback")
-                .build()
-            NotificationManagerCompat.from(applicationContext).createNotificationChannel(channel)
-        }
+        val channel = NotificationChannelCompat.Builder(CHANNEL_ID, IMPORTANCE_LOW)
+            .setName("Playback")
+            .build()
+        NotificationManagerCompat.from(applicationContext).createNotificationChannel(channel)
     }
 
     private fun createNotification(): Notification {
+        val bitmap = ContextCompat.getDrawable(this, R.drawable.ic_notification)?.toBitmap()
+        val metadata = MediaMetadataCompat.Builder()
+            .putString(MediaMetadata.METADATA_KEY_TITLE, "The Kortholt sample is running!")
+            .putString(MediaMetadata.METADATA_KEY_ARTIST, "Kortholt Sample")
+            .putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, bitmap)
+            .build()
+
+        val mediaSession = MediaSessionCompat(this, "SampleService")
+        mediaSession.setMetadata(metadata)
+        val mediaStyle = androidx.media.app.NotificationCompat.MediaStyle()
+            .setMediaSession(mediaSession.sessionToken)
+
         val intent = Intent(this, SampleActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
+        val pendingIntent =
+            PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Kortholt Sample")
-            .setContentText("The Kortholt sample is running!")
             .setContentIntent(pendingIntent)
-            .setSmallIcon(R.drawable.ic_stat_play)
-            .setOngoing(true)
-            .setOnlyAlertOnce(true)
+            .setSmallIcon(R.drawable.ic_music_note)
+            .setStyle(mediaStyle)
             .build()
     }
 

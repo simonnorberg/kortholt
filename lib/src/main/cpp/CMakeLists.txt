@@ -33,6 +33,10 @@ set(PD_SOURCES
     libpd/pure-data/src/d_osc.c
     libpd/pure-data/src/d_resample.c
     libpd/pure-data/src/d_soundfile.c
+    libpd/pure-data/src/d_soundfile_aiff.c
+    libpd/pure-data/src/d_soundfile_caf.c
+    libpd/pure-data/src/d_soundfile_next.c
+    libpd/pure-data/src/d_soundfile_wave.c
     libpd/pure-data/src/d_ugen.c
     libpd/pure-data/src/g_all_guis.c
     libpd/pure-data/src/g_all_guis.h
@@ -87,6 +91,7 @@ set(PD_SOURCES
     libpd/pure-data/src/x_arithmetic.c
     libpd/pure-data/src/x_array.c
     libpd/pure-data/src/x_connective.c
+    libpd/pure-data/src/x_file.c
     libpd/pure-data/src/x_gui.c
     libpd/pure-data/src/x_interface.c
     libpd/pure-data/src/x_list.c
@@ -188,8 +193,10 @@ target_compile_definitions(libpd        PRIVATE ${LIBPD_COMPILE_DEFINITIONS})
 # link against necessary libraries
 target_link_libraries(libpd PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 
-find_library(M m)
-target_link_libraries(libpd PUBLIC ${M_LIBRARIES})
+find_library(M_LIBRARIES m)
+if(M_LIBRARIES)
+    target_link_libraries(libpd PUBLIC ${M_LIBRARIES})
+endif()
 
 set(PD_NATIVE_SOURCES
     libpd/jni/z_jni_plain.c

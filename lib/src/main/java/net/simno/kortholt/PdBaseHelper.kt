@@ -6,7 +6,6 @@ import org.puredata.core.PdBase
 import org.puredata.core.PdBaseLoader
 import org.puredata.core.utils.IoUtils
 import java.io.File
-import java.io.IOException
 
 object PdBaseHelper {
 
@@ -30,7 +29,7 @@ object PdBaseHelper {
         PdBase.addToSearchPath(context.applicationInfo.nativeLibraryDir)
         val dir = context.cacheDir
         var patchFile: File? = null
-        try {
+        runCatching {
             context.resources.openRawResource(patchRes).use { input ->
                 patchFile = if (extractZip) {
                     IoUtils.extractZipResource(input, dir, true)
@@ -40,12 +39,9 @@ object PdBaseHelper {
                 }
             }
             patchHandle = PdBase.openPatch(patchFile)
-        } catch (ignored: IOException) {
-        } finally {
-            try {
-                patchFile?.delete()
-            } catch (ignored: Exception) {
-            }
+        }
+        runCatching {
+            patchFile?.delete()
         }
     }
 

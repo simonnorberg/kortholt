@@ -18,6 +18,9 @@ import androidx.core.graphics.drawable.toBitmap
 
 class SampleService : Service() {
 
+    private val notificationImage
+        get() = ContextCompat.getDrawable(this, R.drawable.ic_notification)?.toBitmap()
+
     override fun onCreate() {
         super.onCreate()
         Kortholt.create(this)
@@ -38,38 +41,40 @@ class SampleService : Service() {
     }
 
     private fun createNotificationChannel() {
-        val channel = NotificationChannelCompat.Builder(CHANNEL_ID, IMPORTANCE_LOW)
-            .setName("Playback")
+        val channel = NotificationChannelCompat.Builder(CHANNEL_NAME, IMPORTANCE_LOW)
+            .setName(CHANNEL_NAME)
             .build()
         NotificationManagerCompat.from(applicationContext).createNotificationChannel(channel)
     }
 
     private fun createNotification(): Notification {
-        val bitmap = ContextCompat.getDrawable(this, R.drawable.ic_notification)?.toBitmap()
         val metadata = MediaMetadataCompat.Builder()
             .putString(MediaMetadata.METADATA_KEY_TITLE, "The Kortholt sample is running!")
             .putString(MediaMetadata.METADATA_KEY_ARTIST, "Kortholt Sample")
-            .putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, bitmap)
+            .putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, notificationImage)
             .build()
 
-        val mediaSession = MediaSessionCompat(this, "SampleService")
+        val mediaSession = MediaSessionCompat(this, CHANNEL_NAME)
         mediaSession.setMetadata(metadata)
+
         val mediaStyle = androidx.media.app.NotificationCompat.MediaStyle()
             .setMediaSession(mediaSession.sessionToken)
 
         val intent = Intent(this, SampleActivity::class.java)
         val pendingIntent =
             PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-        return NotificationCompat.Builder(this, CHANNEL_ID)
+        return NotificationCompat.Builder(this, CHANNEL_NAME)
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.drawable.ic_music_note)
             .setStyle(mediaStyle)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
             .build()
     }
 
     companion object {
         private const val NOTIFICATION_ID = 1337
-        private const val CHANNEL_ID = "1337"
+        private const val CHANNEL_NAME = "Playback"
 
         fun intent(context: Context): Intent = Intent(context, SampleService::class.java)
     }

@@ -1,11 +1,12 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
-    id 'signing'
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+    id "maven-publish"
+    id "signing"
 }
 
 android {
+    namespace "net.simno.kortholt"
     compileSdkVersion versions.compile_sdk
     ndkVersion versions.ndk
     defaultConfig {
@@ -13,9 +14,9 @@ android {
         targetSdkVersion versions.target_sdk
         externalNativeBuild {
             cmake {
-                cppFlags '-std=c++14'
-                arguments '-DANDROID_STL=c++_shared'
-                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+                cppFlags "-std=c++14"
+                arguments "-DANDROID_STL=c++_shared"
+                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
             }
         }
     }
@@ -26,7 +27,7 @@ android {
     }
     sourceSets {
         main {
-            java.srcDirs = ['src/main/java', 'src/main/cpp/libpd/java']
+            java.srcDirs = ["src/main/java", "src/main/cpp/libpd/java"]
         }
     }
     compileOptions {
@@ -38,11 +39,11 @@ android {
     }
     packagingOptions {
         resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
     lintOptions {
-        disable 'GradleDependency'
+        disable "GradleDependency"
     }
 }
 
@@ -51,11 +52,11 @@ dependencies {
     api "androidx.core:core-ktx:$versions.core"
 }
 
-def siteUrl = 'https://github.com/simonnorberg/kortholt'
-def gitUrl = 'https://github.com/simonnorberg/kortholt.git'
+def siteUrl = "https://github.com/simonnorberg/kortholt"
+def gitUrl = "https://github.com/simonnorberg/kortholt.git"
 
-version = '1.10.1'
-group = 'net.simno.kortholt'
+version = "1.11.0"
+group = "net.simno.kortholt"
 
 afterEvaluate {
     publishing {
@@ -63,18 +64,18 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
 
-                groupId = 'net.simno.kortholt'
-                artifactId = 'kortholt'
-                version = '1.10.1'
+                groupId = "net.simno.kortholt"
+                artifactId = "kortholt"
+                version = "1.11.0"
 
                 pom {
-                    name = 'kortholt'
+                    name = "kortholt"
                     url = siteUrl
-                    description = 'Pure Data for Android with libpd and Oboe.'
+                    description = "Pure Data for Android with libpd and Oboe."
                     licenses {
                         license {
-                            name = 'Apache-2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            name = "Apache-2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
                         }
                     }
                     scm {
@@ -84,8 +85,8 @@ afterEvaluate {
                     }
                     developers {
                         developer {
-                            id = 'simonnorberg'
-                            name = 'Simon Norberg'
+                            id = "simonnorberg"
+                            name = "Simon Norberg"
                         }
                     }
                 }
@@ -96,17 +97,17 @@ afterEvaluate {
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    getArchiveClassifier().set('sources')
+    getArchiveClassifier().set("sources")
 }
 
 task javadoc(type: Javadoc) {
-    excludes = ['**/*.kt']
+    excludes = ["**/*.kt"]
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    getArchiveClassifier().set('javadoc')
+    getArchiveClassifier().set("javadoc")
     from javadoc.destinationDir
 }
 

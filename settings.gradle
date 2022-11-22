@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = 'kortholt'
-include ':lib', ':sample'
+rootProject.name = "kortholt"
+include ":lib", ":sample"

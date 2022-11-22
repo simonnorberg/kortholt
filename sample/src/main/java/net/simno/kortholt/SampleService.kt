@@ -21,6 +21,8 @@ class SampleService : Service() {
     private val notificationImage
         get() = ContextCompat.getDrawable(this, R.drawable.ic_notification)?.toBitmap()
 
+    private var mediaSession: MediaSessionCompat? = null
+
     override fun onCreate() {
         super.onCreate()
         Kortholt.create(this)
@@ -35,8 +37,9 @@ class SampleService : Service() {
     override fun onBind(intent: Intent): IBinder? = null
 
     override fun onDestroy() {
+        stopForeground(STOP_FOREGROUND_REMOVE)
         Kortholt.destroy()
-        stopForeground(true)
+        mediaSession?.release()
         super.onDestroy()
     }
 
@@ -54,16 +57,21 @@ class SampleService : Service() {
             .putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, notificationImage)
             .build()
 
-        val mediaSession = MediaSessionCompat(this, CHANNEL_NAME)
-        mediaSession.setMetadata(metadata)
+        mediaSession?.release()
+
+        val session = MediaSessionCompat(this, CHANNEL_NAME)
+        session.setMetadata(metadata)
 
         val mediaStyle = androidx.media.app.NotificationCompat.MediaStyle()
-            .setMediaSession(mediaSession.sessionToken)
+            .setMediaSession(session.sessionToken)
+
+        mediaSession = session
 
         val intent = Intent(this, SampleActivity::class.java)
-        val pendingIntent =
-            PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         return NotificationCompat.Builder(this, CHANNEL_NAME)
+            .setContentTitle("Kortholt Sample")
+            .setContentText("The Kortholt sample is running!")
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.drawable.ic_music_note)
             .setStyle(mediaStyle)
@@ -73,8 +81,8 @@ class SampleService : Service() {
     }
 
     companion object {
-        private const val NOTIFICATION_ID = 1337
         private const val CHANNEL_NAME = "Playback"
+        private const val NOTIFICATION_ID = 1337
 
         fun intent(context: Context): Intent = Intent(context, SampleService::class.java)
     }

@@ -1,9 +1,10 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
 }
 
 android {
+    namespace "net.simno.kortholt"
     compileSdkVersion versions.compile_sdk
     defaultConfig {
         applicationId "net.simno.kortholt"
@@ -21,22 +22,23 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion versions.compose
+        kotlinCompilerExtensionVersion "1.4.0-alpha02"
     }
     packagingOptions {
         resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
     lintOptions {
-        disable 'GradleDependency'
+        disable "GradleDependency"
     }
 }
 
 dependencies {
-    implementation project(':lib')
+    implementation project(":lib")
     implementation "androidx.activity:activity-compose:$versions.activity"
-    implementation "androidx.compose.ui:ui:$versions.compose"
-    implementation "androidx.compose.material:material:$versions.compose"
+    implementation platform("androidx.compose:compose-bom:2022.11.00")
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.material:material"
     implementation "androidx.media:media:$versions.media"
 }

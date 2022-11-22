@@ -49,21 +49,19 @@ set(PD_SOURCES
     libpd/pure-data/src/g_editor_extras.c
     libpd/pure-data/src/g_graph.c
     libpd/pure-data/src/g_guiconnect.c
-    libpd/pure-data/src/g_hdial.c
-    libpd/pure-data/src/g_hslider.c
     libpd/pure-data/src/g_io.c
     libpd/pure-data/src/g_mycanvas.c
     libpd/pure-data/src/g_numbox.c
+    libpd/pure-data/src/g_radio.c
     libpd/pure-data/src/g_readwrite.c
     libpd/pure-data/src/g_rtext.c
     libpd/pure-data/src/g_scalar.c
+    libpd/pure-data/src/g_slider.c
     libpd/pure-data/src/g_template.c
     libpd/pure-data/src/g_text.c
     libpd/pure-data/src/g_toggle.c
     libpd/pure-data/src/g_traversal.c
     libpd/pure-data/src/g_undo.c
-    libpd/pure-data/src/g_vdial.c
-    libpd/pure-data/src/g_vslider.c
     libpd/pure-data/src/g_vumeter.c
     libpd/pure-data/src/m_atom.c
     libpd/pure-data/src/m_binbuf.c
@@ -79,6 +77,7 @@ set(PD_SOURCES
     libpd/pure-data/src/s_audio.c
     libpd/pure-data/src/s_audio_dummy.c
     libpd/pure-data/src/s_inter.c
+    libpd/pure-data/src/s_inter_gui.c
     libpd/pure-data/src/s_loader.c
     libpd/pure-data/src/s_main.c
     libpd/pure-data/src/s_net.c

@@ -43,7 +43,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation 'net.simno.kortholt:kortholt:1.10.1'
+    implementation "net.simno.kortholt:kortholt:1.11.0"
 }
 ```
 

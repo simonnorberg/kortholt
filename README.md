@@ -2,11 +2,11 @@
 
 Pure Data for Android with [libpd](https://github.com/libpd/libpd) and [Oboe](https://github.com/google/oboe).
 
-| Features     |                    |
-|--------------|--------------------|
-| Audio output | :heavy_check_mark: |
-| Audio input  | :x:                |
-| MIDI         | :x:                |
+| Features     |     |
+|--------------|-----|
+| Audio output | ✅   |
+| Audio input  | ❌   |
+| MIDI         | ❌   |
 
 ## Build
 
@@ -43,7 +43,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation "net.simno.kortholt:kortholt:1.11.0"
+    implementation "net.simno.kortholt:kortholt:1.12.0"
 }
 ```
 

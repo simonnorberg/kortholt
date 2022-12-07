@@ -210,7 +210,12 @@ target_link_libraries(pdnative libpd)
 
 set(OBOE_DIR ./oboe)
 add_subdirectory(${OBOE_DIR} ./oboe)
-include_directories(${OBOE_DIR}/include ${OBOE_DIR}/samples/shared ${OBOE_DIR}/samples/hello-oboe/src/main/cpp)
+include_directories(
+    ${OBOE_DIR}/include
+    ${OBOE_DIR}/samples/shared
+    ${OBOE_DIR}/samples/hello-oboe/src/main/cpp
+    ${OBOE_DIR}/apps/OboeTester/app/src/main/cpp/util
+)
 
 # Debug utilities
 set(DEBUG_UTILS_PATH "${OBOE_DIR}/samples/debug-utils")
@@ -225,6 +230,7 @@ set(APP_SOURCES
     PureDataSource.cpp
     Kortholt.cpp
     ${OBOE_DIR}/samples/hello-oboe/src/main/cpp/LatencyTuningCallback.cpp
+    ${OBOE_DIR}/apps/OboeTester/app/src/main/cpp/util/WaveFileWriter.cpp
 )
 add_library(
     kortholt

@@ -14,9 +14,11 @@ public:
 
     void renderAudio(float *audioData, int32_t numFrames) override;
 
+    void sendBang(const char *dest);
+
 private:
     int32_t ticksPerBuffer;
-    std::unique_ptr<pd::PdBase> pdBase;
+    std::shared_ptr<pd::PdBase> pdBase;
 };
 
 #endif //PUREDATASOURCE_H

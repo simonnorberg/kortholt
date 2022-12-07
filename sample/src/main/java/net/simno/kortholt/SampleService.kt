@@ -23,22 +23,16 @@ class SampleService : Service() {
 
     private var mediaSession: MediaSessionCompat? = null
 
-    override fun onCreate() {
-        super.onCreate()
-        Kortholt.create(this)
-    }
-
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, createNotification())
         return START_STICKY
     }
 
-    override fun onBind(intent: Intent): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onDestroy() {
         stopForeground(STOP_FOREGROUND_REMOVE)
-        Kortholt.destroy()
         mediaSession?.release()
         super.onDestroy()
     }

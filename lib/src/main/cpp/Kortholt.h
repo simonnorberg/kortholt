@@ -6,23 +6,32 @@
 #include <IRestartable.h>
 #include <DefaultErrorCallback.h>
 #include <LatencyTuningCallback.h>
+#include <WaveFileWriter.h>
 #include "PureDataSource.h"
 
 class Kortholt : public IRestartable {
 
 public:
-    Kortholt(std::vector<int> cpuIds);
+    Kortholt(std::vector<int> cpuIds, bool stream);
 
     virtual ~Kortholt();
 
     virtual void restart() override;
 
+    int32_t saveWaveFile(
+            const char *fileName,
+            const int32_t duration,
+            const char *startBang,
+            const char *stopBang
+    );
+
 private:
+    bool isStream;
     std::mutex streamLock;
     std::shared_ptr<oboe::AudioStream> stream;
     std::shared_ptr<PureDataSource> pureDataSource;
-    std::unique_ptr<LatencyTuningCallback> dataCallback;
-    std::unique_ptr<DefaultErrorCallback> errorCallback;
+    std::shared_ptr<LatencyTuningCallback> dataCallback;
+    std::shared_ptr<DefaultErrorCallback> errorCallback;
     int32_t ticksPerBuffer;
     int32_t bufferSize;
 

@@ -2,7 +2,7 @@
 
 PureDataSource::PureDataSource(int32_t ticksPerBuffer) {
     this->ticksPerBuffer = ticksPerBuffer;
-    pdBase = std::make_unique<pd::PdBase>();
+    pdBase = std::make_shared<pd::PdBase>();
 }
 
 void PureDataSource::init(int32_t sampleRate, int32_t channelCount) {
@@ -12,6 +12,9 @@ void PureDataSource::init(int32_t sampleRate, int32_t channelCount) {
 }
 
 void PureDataSource::renderAudio(float *audioData, int32_t numFrames) {
-    auto *outputBuffer = static_cast<float *>(audioData);
-    pdBase->processFloat(ticksPerBuffer, new float[0], outputBuffer);
+    pdBase->processFloat(ticksPerBuffer, new float[0], audioData);
+}
+
+void PureDataSource::sendBang(const char *dest) {
+    pdBase->sendBang(dest);
 }

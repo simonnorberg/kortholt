@@ -22,6 +22,7 @@ android {
     }
     externalNativeBuild {
         cmake {
+            version "3.22.1"
             path "src/main/cpp/CMakeLists.txt"
         }
     }
@@ -50,12 +51,15 @@ android {
 dependencies {
     api "androidx.annotation:annotation:$versions.annotation"
     api "androidx.core:core-ktx:$versions.core"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+    implementation "com.getkeepsafe.relinker:relinker:$versions.relinker"
 }
 
 def siteUrl = "https://github.com/simonnorberg/kortholt"
 def gitUrl = "https://github.com/simonnorberg/kortholt.git"
 
-version = "1.12.0"
+version = "2.0.0"
 group = "net.simno.kortholt"
 
 afterEvaluate {
@@ -66,7 +70,7 @@ afterEvaluate {
 
                 groupId = "net.simno.kortholt"
                 artifactId = "kortholt"
-                version = "1.12.0"
+                version = "2.0.0"
 
                 pom {
                     name = "kortholt"

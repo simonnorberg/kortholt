@@ -1,78 +1,93 @@
 package net.simno.kortholt
 
 import android.content.Context
-import android.media.AudioManager
-import android.media.AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER
-import android.media.AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE
-import androidx.core.content.getSystemService
+import androidx.annotation.RawRes
 import java.io.File
-import java.util.concurrent.atomic.AtomicLong
 import kotlin.time.Duration
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 object Kortholt {
 
-    private val kortholtHandle = AtomicLong(0L)
+    private var factory: Player.Factory? = null
+    private var player: Player? = null
 
-    init {
-        System.loadLibrary("kortholt")
+    @JvmStatic
+    fun player(context: Context): Player {
+        return player ?: newPlayer(context)
     }
 
-    fun create(context: Context) {
-        create(context, stream = true)
+    @JvmStatic
+    @Synchronized
+    fun setPlayer(player: Player) {
+        this.factory = null
+        this.player = player
     }
 
-    private fun create(context: Context, stream: Boolean) {
-        destroy()
-        setDefaultStreamValues(context)
-        kortholtHandle.set(nativeCreateKortholt(getExclusiveCores(), stream))
+    @JvmStatic
+    @Synchronized
+    fun setPlayer(factory: Player.Factory) {
+        this.factory = factory
+        this.player = null
     }
 
-    fun destroy() {
-        kortholtHandle.getAndSet(0L).takeIf { it != 0L }?.let { nativeDeleteKortholt(it) }
+    @JvmStatic
+    @Synchronized
+    fun reset() {
+        this.factory = null
+        this.player = null
     }
 
-    @ExperimentalWaveFile
-    fun saveWaveFile(
-        context: Context,
-        outputFile: File,
-        duration: Duration,
-        startBang: String = "",
-        stopBang: String = ""
-    ): Int = runCatching {
-        create(context, stream = false)
-        nativeSaveWaveFile(
-            kortholtHandle = kortholtHandle.get(),
-            fileName = outputFile.absolutePath,
-            duration = duration.inWholeMilliseconds,
-            startBang = startBang,
-            stopBang = stopBang
-        )
-    }.getOrDefault(0)
+    @Synchronized
+    private fun newPlayer(context: Context): Player {
+        player?.let { return it }
 
-    private fun setDefaultStreamValues(context: Context) {
-        context.getSystemService<AudioManager>()?.let { am ->
-            runCatching {
-                val sampleRate = am.getProperty(PROPERTY_OUTPUT_SAMPLE_RATE)?.toInt()
-                val framesPerBurst = am.getProperty(PROPERTY_OUTPUT_FRAMES_PER_BUFFER)?.toInt()
-                if (sampleRate != null && framesPerBurst != null) {
-                    nativeSetDefaultStreamValues(sampleRate, framesPerBurst)
-                }
+        val newPlayer = factory?.newPlayer()
+            ?: (context.applicationContext as? Player.Factory)?.newPlayer()
+            ?: Player.Builder(context).build()
+        factory = null
+        player = newPlayer
+
+        return newPlayer
+    }
+
+    interface Player {
+        suspend fun openPatch(
+            @RawRes patchRes: Int,
+            patchName: String,
+            extractZip: Boolean = false
+        ): Boolean
+
+        suspend fun closePatch(): Boolean
+
+        suspend fun startStream(): Boolean
+
+        suspend fun stopStream(): Boolean
+
+        @ExperimentalWaveFile
+        suspend fun saveWaveFile(
+            outputFile: File,
+            duration: Duration,
+            startBang: String = "",
+            stopBang: String = ""
+        ): Int
+
+        fun interface Factory {
+            fun newPlayer(): Player
+        }
+
+        class Builder(context: Context) {
+            private val applicationContext: Context = context.applicationContext
+            private var dispatcher: CoroutineDispatcher = Dispatchers.IO
+
+            fun dispatcher(dispatcher: CoroutineDispatcher): Builder = apply {
+                this.dispatcher = dispatcher
             }
+
+            fun build(): Player = KortholtPlayer(
+                context = applicationContext,
+                dispatcher = dispatcher
+            )
         }
     }
-
-    private fun getExclusiveCores(): IntArray {
-        return runCatching { android.os.Process.getExclusiveCores() }.getOrDefault(intArrayOf())
-    }
-
-    private external fun nativeCreateKortholt(cpuIds: IntArray, stream: Boolean): Long
-    private external fun nativeDeleteKortholt(kortholtHandle: Long)
-    private external fun nativeSetDefaultStreamValues(sampleRate: Int, framesPerBurst: Int)
-    private external fun nativeSaveWaveFile(
-        kortholtHandle: Long,
-        fileName: String,
-        duration: Long,
-        startBang: String,
-        stopBang: String
-    ): Int
 }

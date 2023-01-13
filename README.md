@@ -18,20 +18,21 @@ Pure Data for Android with [libpd](https://github.com/libpd/libpd) and [Oboe](ht
 ## Usage
 
 ```kotlin
-// Load a Pure Data patch to use with Kortholt
-PdBaseHelper.openPatch(context, R.raw.test, "test.pd")
+val kortholt = context.kortholt
+// Load a Pure Data patch
+kortholt.openPatch(R.raw.test, "test.pd")
 
 // Start the audio output stream
-Kortholt.create(context)
+kortholt.startStream()
 
 // Use PdBase to send messages to libpd
 PdBase.sendBang("play")
 
 // Stop the audio output stream
-Kortholt.destroy()
+kortholt.stopStream()
 
 // Close the Pure Data patch
-PdBaseHelper.closePatch()
+kortholt.closePatch()
 ```
 
 See [Sample](https://github.com/simonnorberg/kortholt/tree/main/sample) for detailed usage.
@@ -43,7 +44,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation "net.simno.kortholt:kortholt:1.12.0"
+    implementation "net.simno.kortholt:kortholt:2.0.0"
 }
 ```
 

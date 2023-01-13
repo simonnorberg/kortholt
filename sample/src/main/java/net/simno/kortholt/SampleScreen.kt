@@ -18,17 +18,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.puredata.core.PdBase
 import java.io.File
 import kotlin.time.DurationUnit.SECONDS
 import kotlin.time.toDuration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.puredata.core.PdBase
 
 @OptIn(ExperimentalWaveFile::class)
 @Composable
 fun SampleScreen() {
     val context = LocalContext.current
+    val kortholt = remember { context.kortholt }
     val scope = rememberCoroutineScope()
     var isPlaying by remember { mutableStateOf(false) }
     var waveFile by remember { mutableStateOf<File?>(null) }
@@ -39,11 +40,11 @@ fun SampleScreen() {
             dir.mkdirs()
             val file = File(dir, "sample_${seconds}sec.wav")
 
-            Kortholt.saveWaveFile(context, file, seconds.toDuration(SECONDS))
+            kortholt.saveWaveFile(file, seconds.toDuration(SECONDS))
             waveFile = file
 
             if (isPlaying) {
-                Kortholt.create(context)
+                kortholt.startStream()
             }
         }
     }
@@ -59,10 +60,10 @@ fun SampleScreen() {
                 SampleService.intent(context).let { intent ->
                     if (isChecked) {
                         ContextCompat.startForegroundService(context, intent)
-                        Kortholt.create(context)
+                        scope.launch { kortholt.startStream() }
                     } else {
                         context.stopService(intent)
-                        Kortholt.destroy()
+                        scope.launch { kortholt.stopStream() }
                     }
                 }
             }

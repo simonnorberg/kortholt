@@ -1,23 +1,26 @@
 buildscript {
     ext.versions = [
             "kotlin"     : "1.7.21",
+            "coroutines" : "1.6.4",
             "compile_sdk": 33,
             "min_sdk"    : 28,
             "target_sdk" : 33,
             "ndk"        : "25.1.8937393",
             "activity"   : "1.6.1",
             "annotation" : "1.5.0",
+            "compose"    : "2023.01.00",
             "core"       : "1.9.0",
             "lifecycle"  : "2.5.1",
-            "media"      : "1.6.0"
+            "media"      : "1.6.0",
+            "relinker"   : "1.4.5"
     ]
 }
 
 plugins {
-    id "com.android.application" version "7.3.1" apply false
-    id "com.android.library" version "7.3.1" apply false
+    id "com.android.application" version "7.4.0" apply false
+    id "com.android.library" version "7.4.0" apply false
     id "org.jetbrains.kotlin.android" version "1.7.21" apply false
-    id "com.diffplug.spotless" version "6.12.0"
+    id "com.diffplug.spotless" version "6.12.1"
     id "com.github.ben-manes.versions" version "0.44.0"
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
@@ -56,7 +59,10 @@ subprojects {
     spotless {
         kotlin {
             target "src/*/java/**/*.kt"
-            ktlint("0.47.1")
+            ktlint("0.48.1").editorConfigOverride([
+                    ktlint_code_style: "android",
+                    max_line_length  : 120
+            ])
         }
     }
 }

@@ -19,7 +19,7 @@ std::vector<int> convertJavaArrayToVector(
 extern "C" {
 
 JNIEXPORT jlong JNICALL
-Java_net_simno_kortholt_Kortholt_nativeCreateKortholt(
+Java_net_simno_kortholt_KortholtPlayer_nativeCreateKortholt(
         JNIEnv *env,
         jobject /*unused*/,
         jintArray jCpuIds,
@@ -31,7 +31,7 @@ Java_net_simno_kortholt_Kortholt_nativeCreateKortholt(
 }
 
 JNIEXPORT void JNICALL
-Java_net_simno_kortholt_Kortholt_nativeDeleteKortholt(
+Java_net_simno_kortholt_KortholtPlayer_nativeDeleteKortholt(
         JNIEnv * /*unused*/,
         jobject /*unused*/,
         jlong kortholtHandle
@@ -40,7 +40,7 @@ Java_net_simno_kortholt_Kortholt_nativeDeleteKortholt(
 }
 
 JNIEXPORT void JNICALL
-Java_net_simno_kortholt_Kortholt_nativeSetDefaultStreamValues(
+Java_net_simno_kortholt_KortholtPlayer_nativeSetDefaultStreamValues(
         JNIEnv * /*unused*/,
         jobject /*unused*/,
         jint sampleRate,
@@ -51,7 +51,7 @@ Java_net_simno_kortholt_Kortholt_nativeSetDefaultStreamValues(
 }
 
 JNIEXPORT jint JNICALL
-Java_net_simno_kortholt_Kortholt_nativeSaveWaveFile(
+Java_net_simno_kortholt_KortholtPlayer_nativeSaveWaveFile(
         JNIEnv *env,
         jobject /*unused*/,
         jlong kortholtHandle,

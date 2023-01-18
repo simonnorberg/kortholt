@@ -125,6 +125,6 @@ internal class KortholtPlayer(
 
     companion object {
         private const val NOT_SET = -1L
-        private const val VERSION = "2.0.0"
+        private const val VERSION = "2.0.1"
     }
 }

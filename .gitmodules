@@ -1,8 +1,8 @@
 [submodule "lib/src/main/cpp/oboe"]
-	path = lib/src/main/cpp/oboe
-	url = https://github.com/simonnorberg/oboe.git
-	branch = develop
+    path = lib/src/main/cpp/oboe
+    url = https://github.com/simonnorberg/oboe.git
+    branch = develop
 [submodule "lib/src/main/cpp/libpd"]
-	path = lib/src/main/cpp/libpd
-	url = https://github.com/simonnorberg/libpd.git
-	branch = develop
+    path = lib/src/main/cpp/libpd
+    url = https://github.com/simonnorberg/libpd.git
+    branch = develop

@@ -1,4 +1,4 @@
-package net.simno.kortholt
+package net.simno.kortholt.sample
 
 import android.app.Notification
 import android.app.NotificationManager.IMPORTANCE_LOW

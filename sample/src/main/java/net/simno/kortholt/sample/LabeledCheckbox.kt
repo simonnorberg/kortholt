@@ -1,4 +1,4 @@
-package net.simno.kortholt
+package net.simno.kortholt.sample
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,11 +21,12 @@ import androidx.compose.ui.unit.dp
 fun LabeledCheckbox(
     label: Int,
     checked: Boolean,
+    modifier: Modifier = Modifier,
     onCheckedChange: (Boolean) -> Unit
 ) {
     var isChecked by remember { mutableStateOf(checked) }
     Row(
-        modifier = Modifier
+        modifier = modifier
             .clickable {
                 isChecked = !isChecked
                 onCheckedChange(isChecked)

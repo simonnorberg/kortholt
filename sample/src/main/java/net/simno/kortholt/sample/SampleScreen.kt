@@ -1,4 +1,4 @@
-package net.simno.kortholt
+package net.simno.kortholt.sample
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,11 +23,15 @@ import kotlin.time.DurationUnit.SECONDS
 import kotlin.time.toDuration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.simno.kortholt.ExperimentalWaveFile
+import net.simno.kortholt.kortholt
 import org.puredata.core.PdBase
 
 @OptIn(ExperimentalWaveFile::class)
 @Composable
-fun SampleScreen() {
+fun SampleScreen(
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
     val kortholt = remember { context.kortholt }
     val scope = rememberCoroutineScope()
@@ -50,7 +54,7 @@ fun SampleScreen() {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         LabeledCheckbox(
             label = R.string.play_label,

@@ -1,4 +1,4 @@
-package net.simno.kortholt
+package net.simno.kortholt.sample
 
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult

@@ -25,8 +25,8 @@ kortholt.openPatch(R.raw.test, "test.pd")
 // Start the audio output stream
 kortholt.startStream()
 
-// Use PdBase to send messages to libpd
-PdBase.sendBang("play")
+// Send messages to libpd
+kortholt.sendBang("play")
 
 // Stop the audio output stream
 kortholt.stopStream()
@@ -44,7 +44,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation "net.simno.kortholt:kortholt:2.0.1"
+    implementation "net.simno.kortholt:kortholt:3.0.0"
 }
 ```
 

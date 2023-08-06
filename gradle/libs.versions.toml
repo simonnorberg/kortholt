@@ -16,6 +16,7 @@ coroutines = "1.7.3"
 kotlin = "1.9.0"
 ktlint = "0.50.0"
 relinker = "1.4.5"
+zip4j = "2.11.5"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -36,3 +37,4 @@ compose-material = { module = "androidx.compose.material3:material3" }
 compose-lint = { module = "com.slack.lint.compose:compose-lint-checks", version.ref = "compose-lint" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 relinker = { module = "com.getkeepsafe.relinker:relinker", version.ref = "relinker" }
+zip4j = { module = "net.lingala.zip4j:zip4j", version.ref = "zip4j" }

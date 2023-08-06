@@ -59,10 +59,11 @@ object Kortholt {
         ): Boolean
 
         suspend fun closePatch(): Boolean
-
         suspend fun startStream(): Boolean
-
         suspend fun stopStream(): Boolean
+        fun sendBang(receiver: String)
+        fun sendFloat(receiver: String, x: Float)
+        fun sendList(receiver: String, vararg args: Any)
 
         @ExperimentalWaveFile
         suspend fun saveWaveFile(

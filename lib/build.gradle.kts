@@ -24,11 +24,6 @@ android {
             path("src/main/cpp/CMakeLists.txt")
         }
     }
-    sourceSets {
-        getByName("main") {
-            java.srcDirs("src/main/java", "src/main/cpp/libpd/java")
-        }
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -58,12 +53,13 @@ dependencies {
     api(libs.androidx.annotation)
     implementation(libs.androidx.core)
     implementation(libs.relinker)
+    implementation(libs.zip4j)
 }
 
 val siteUrl = "https://github.com/simonnorberg/kortholt"
 val gitUrl = "https://github.com/simonnorberg/kortholt.git"
 
-version = "2.0.1"
+version = "3.0.0"
 group = "net.simno.kortholt"
 
 afterEvaluate {
@@ -73,7 +69,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "net.simno.kortholt"
                 artifactId = "kortholt"
-                version = "2.0.1"
+                version = "3.0.0"
                 pom {
                     name.set("kortholt")
                     url.set(siteUrl)

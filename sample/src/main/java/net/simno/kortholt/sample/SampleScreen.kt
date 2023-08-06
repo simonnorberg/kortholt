@@ -25,7 +25,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.simno.kortholt.ExperimentalWaveFile
 import net.simno.kortholt.kortholt
-import org.puredata.core.PdBase
 
 @OptIn(ExperimentalWaveFile::class)
 @Composable
@@ -76,14 +75,14 @@ fun SampleScreen(
             label = R.string.left_label,
             checked = true,
             onCheckedChange = { isChecked ->
-                PdBase.sendFloat("left", if (isChecked) 1f else 0f)
+                kortholt.sendFloat("left", if (isChecked) 1f else 0f)
             }
         )
         LabeledCheckbox(
             label = R.string.right_label,
             checked = true,
             onCheckedChange = { isChecked ->
-                PdBase.sendFloat("right", if (isChecked) 1f else 0f)
+                kortholt.sendFloat("right", if (isChecked) 1f else 0f)
             }
         )
         Text(

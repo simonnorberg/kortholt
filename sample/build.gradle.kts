@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.cachefix)
 }
 
 android {
@@ -12,10 +13,6 @@ android {
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
         buildConfig = true
@@ -30,6 +27,7 @@ android {
     lint {
         warningsAsErrors = true
         abortOnError = true
+        disable += "ObsoleteLintCustomCheck"
     }
 }
 
@@ -42,4 +40,5 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.material)
     lintChecks(libs.compose.lint)
+    ktlintRuleset(libs.ktlint.compose)
 }

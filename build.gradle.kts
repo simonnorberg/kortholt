@@ -1,34 +1,33 @@
-import com.diffplug.gradle.spotless.SpotlessExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.spotless) apply false
-    alias(libs.plugins.publishPlugin)
-    alias(libs.plugins.dependencyUpdates)
+    alias(libs.plugins.ktlint.gradle)
+    alias(libs.plugins.publish.plugin)
+    alias(libs.plugins.gradle.versions)
 }
 
 allprojects {
+    plugins.withType<JavaBasePlugin>().configureEach {
+        extensions.configure<JavaPluginExtension> {
+            toolchain {
+                languageVersion.set(
+                    JavaLanguageVersion.of(rootProject.libs.versions.javaVersion.get().toInt())
+                )
+            }
+        }
+    }
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_11.toString()
             allWarningsAsErrors = true
         }
     }
-    apply(plugin = rootProject.libs.plugins.spotless.get().pluginId)
-    configure<SpotlessExtension> {
-        kotlin {
-            target("**/*.kt")
-            targetExclude("**/cpp/**/*.kt")
-            ktlint(libs.versions.ktlint.get()).editorConfigOverride(
-                mapOf(
-                    "ktlint_code_style" to "android_studio",
-                    "max_line_length" to 120
-                )
-            )
-        }
+    apply(plugin = rootProject.libs.plugins.ktlint.gradle.get().pluginId)
+    ktlint {
+        version.set(rootProject.libs.versions.ktlint.asProvider())
+        android.set(true)
     }
 }
 

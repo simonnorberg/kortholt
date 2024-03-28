@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.cachefix)
     id("maven-publish")
     id("signing")
 }
@@ -23,10 +24,6 @@ android {
         cmake {
             path("src/main/cpp/CMakeLists.txt")
         }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
     }
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -59,7 +56,7 @@ dependencies {
 val siteUrl = "https://github.com/simonnorberg/kortholt"
 val gitUrl = "https://github.com/simonnorberg/kortholt.git"
 
-version = "3.0.0"
+version = "3.1.0"
 group = "net.simno.kortholt"
 
 afterEvaluate {
@@ -69,7 +66,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "net.simno.kortholt"
                 artifactId = "kortholt"
-                version = "3.0.0"
+                version = "3.1.0"
                 pom {
                     name.set("kortholt")
                     url.set(siteUrl)

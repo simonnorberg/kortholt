@@ -39,12 +39,12 @@ See [Sample](https://github.com/simonnorberg/kortholt/tree/main/sample) for deta
 
 ## Download
 
-```groovy
+```kotlin
 repositories {
     mavenCentral()
 }
 dependencies {
-    implementation "net.simno.kortholt:kortholt:3.0.0"
+    implementation("net.simno.kortholt:kortholt:3.1.0")
 }
 ```
 

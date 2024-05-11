@@ -44,7 +44,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation("net.simno.kortholt:kortholt:3.1.0")
+    implementation("net.simno.kortholt:kortholt:3.2.0")
 }
 ```
 

@@ -13,9 +13,7 @@ object Kortholt {
     private var player: Player? = null
 
     @JvmStatic
-    fun player(context: Context): Player {
-        return player ?: newPlayer(context)
-    }
+    fun player(context: Context): Player = player ?: newPlayer(context)
 
     @JvmStatic
     @Synchronized
@@ -77,7 +75,9 @@ object Kortholt {
             fun newPlayer(): Player
         }
 
-        class Builder(context: Context) {
+        class Builder(
+            context: Context
+        ) {
             private val applicationContext: Context = context.applicationContext
             private var dispatcher: CoroutineDispatcher = Dispatchers.IO
 

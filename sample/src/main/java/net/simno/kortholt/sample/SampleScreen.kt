@@ -35,6 +35,8 @@ fun SampleScreen(
     val kortholt = remember { context.kortholt }
     val scope = rememberCoroutineScope()
     var isPlaying by remember { mutableStateOf(false) }
+    var leftEnabled by remember { mutableStateOf(true) }
+    var rightEnabled by remember { mutableStateOf(true) }
     var waveFile by remember { mutableStateOf<File?>(null) }
 
     fun saveWaveFile(seconds: Int) {
@@ -73,15 +75,17 @@ fun SampleScreen(
         )
         LabeledCheckbox(
             label = R.string.left_label,
-            checked = true,
+            checked = leftEnabled,
             onCheckedChange = { isChecked ->
+                leftEnabled = isChecked
                 kortholt.sendFloat("left", if (isChecked) 1f else 0f)
             }
         )
         LabeledCheckbox(
             label = R.string.right_label,
-            checked = true,
+            checked = rightEnabled,
             onCheckedChange = { isChecked ->
+                rightEnabled = isChecked
                 kortholt.sendFloat("right", if (isChecked) 1f else 0f)
             }
         )

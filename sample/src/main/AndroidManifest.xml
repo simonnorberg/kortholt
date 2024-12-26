@@ -12,7 +12,7 @@
         android:icon="@drawable/ic_music_note"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.Light"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar"
         tools:targetApi="tiramisu">
         <activity
             android:name=".SampleActivity"

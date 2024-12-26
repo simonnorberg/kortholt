@@ -31,7 +31,6 @@ android {
     lint {
         warningsAsErrors = true
         abortOnError = true
-        disable += "GradleDependency"
     }
     publishing {
         singleVariant("release") {
@@ -57,7 +56,7 @@ dependencies {
 val siteUrl = "https://github.com/simonnorberg/kortholt"
 val gitUrl = "https://github.com/simonnorberg/kortholt.git"
 
-version = "3.2.0"
+version = "3.3.0"
 group = "net.simno.kortholt"
 
 afterEvaluate {
@@ -67,7 +66,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "net.simno.kortholt"
                 artifactId = "kortholt"
-                version = "3.2.0"
+                version = "3.3.0"
                 pom {
                     name.set("kortholt")
                     url.set(siteUrl)
